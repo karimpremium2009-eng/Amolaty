@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#08070f">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="رسالة عيد ميلاد صُنعت لأمال">
+  <title>إلى أمولتي</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Noto+Kufi+Arabic:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="ambient-layers" aria-hidden="true">
+    <div class="aurora aurora-one"></div>
+    <div class="aurora aurora-two"></div>
+    <div class="aurora aurora-three"></div>
+    <div class="grain"></div>
+  </div>
+  <canvas id="ambientCanvas" aria-hidden="true"></canvas>
+  <div id="pointerGlow" aria-hidden="true"></div>
+  <div id="transitionVeil" aria-hidden="true"><span></span></div>
+
+  <button id="musicToggle" class="music-toggle hidden" type="button" aria-label="فتح مشغل الموسيقى">
+    <span class="music-bars"><i></i><i></i><i></i></span>
+  </button>
+  <aside id="musicPanel" class="music-panel hidden" aria-label="موسيقى الرحلة">
+    <div class="music-panel-head">
+      <div>
+        <small>موسيقى الرحلة</small>
+        <strong>لأمولتي ✦</strong>
+      </div>
+      <button id="closeMusicPanel" type="button" aria-label="إغلاق المشغل">×</button>
+    </div>
+    <iframe id="musicFrame" title="موسيقى رحلة أمال" src="about:blank" allow="autoplay; encrypted-media; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    <p>تبدأ الموسيقى تلقائيًا بعد إدخال الرمز، وتُعاد من البداية عند انتهائها</p>
+  </aside>
+
+  <main id="app">
+    <section id="gate" class="screen gate-screen active" aria-labelledby="gateTitle">
+      <div class="gate-shell">
+        <div class="gate-symbols" aria-hidden="true">
+          <span>✦</span><span>♡</span><span>☾</span>
+        </div>
+        <p class="eyebrow">رسالة لا تعرف طريقها إلا إلى شخص واحد</p>
+        <h1 id="gateTitle">أدخلي الرمز السري</h1>
+        <p class="gate-copy">أربع خانات فقط، والجواب عند كريم 🌝</p>
+
+        <div id="pinDisplay" class="pin-display" aria-label="خانات الرمز السري">
+          <span></span><span></span><span></span><span></span>
+        </div>
+
+        <div id="pinKeypad" class="pin-keypad" aria-label="لوحة أرقام الرمز">
+          <button type="button" data-key="1">1</button>
+          <button type="button" data-key="2">2</button>
+          <button type="button" data-key="3">3</button>
+          <button type="button" data-key="4">4</button>
+          <button type="button" data-key="5">5</button>
+          <button type="button" data-key="6">6</button>
+          <button type="button" data-key="7">7</button>
+          <button type="button" data-key="8">8</button>
+          <button type="button" data-key="9">9</button>
+          <button type="button" class="key-decor" data-key="clear" aria-label="مسح الكل">✦</button>
+          <button type="button" data-key="0">0</button>
+          <button type="button" class="key-delete" data-key="delete" aria-label="حذف آخر رقم">⌫</button>
+        </div>
+        <p id="pinFeedback" class="feedback persistent" aria-live="polite"></p>
+        <div id="gateBloom" class="gate-bloom" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <section id="intro" class="screen intro-screen" aria-labelledby="introTitle">
+      <div class="intro-rings" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="intro-content centered">
+        <p class="eyebrow cinematic-line">تم التعرّف عليكِ</p>
+        <h2 id="introTitle" class="hero-title cinematic-line">أهلًا يا أمولتي</h2>
+        <p class="hero-copy cinematic-line">أبطئي قليلًا، هذه ليست صفحة عادية، إنها ليلة صغيرة صنعتها لكِ كلمةً كلمة</p>
+        <button id="startJourney" class="primary-button cinematic-line" type="button">ابدئي الرحلة ببطء ✦</button>
+      </div>
+    </section>
+
+    <section id="ageMilestone" class="screen age-screen" aria-labelledby="ageTitle">
+      <div class="age-stage centered">
+        <p class="eyebrow">هذه الليلة ليست عيد ميلاد عاديًا</p>
+
+        <button id="ageNumberButton" class="age-number-wrap" type="button" aria-label="اضغطي لإطلاق أضواء السنوات الثماني عشرة">
+          <span class="age-halo" aria-hidden="true"></span>
+          <strong class="age-number">18</strong>
+          <span class="age-years-label">سنة</span>
+          <span id="ageSparks" class="age-sparks" aria-hidden="true"></span>
+        </button>
+
+        <h2 id="ageTitle">ثمانية عشر عامًا من النور</h2>
+        <p id="ageStatus" class="age-status">كل سنة منها أوصلتكِ إلى هذه اللحظة</p>
+
+        <div class="life-counter" aria-label="المدة منذ بداية يوم ميلاد أمال">
+          <div class="counter-card">
+            <span class="counter-icon">☾</span>
+            <strong id="daysAlive">6574</strong>
+            <small>يومًا في هذه الحياة</small>
+          </div>
+          <div class="counter-card">
+            <span class="counter-icon">✦</span>
+            <strong id="minutesAlive">9,466,560</strong>
+            <small>دقيقة صنعت أمولتي</small>
+          </div>
+        </div>
+
+        <p id="birthPrecisionNote" class="counter-note">محسوبة منذ بداية يوم 30 يوليو 2008</p>
+        <p class="tap-hint">المسي الرقم 18 مرة واحدة ✦</p>
+        <button id="continueFromAge" class="primary-button" type="button">واصلي إلى الرسالة</button>
+      </div>
+    </section>
+
+    <section id="consentGame" class="screen" aria-labelledby="consentTitle">
+      <div class="glass-card centered floating-card">
+        <div class="card-halo" aria-hidden="true"></div>
+        <p class="eyebrow">قبل أن نبدأ فعلًا</p>
+        <h2 id="consentTitle">أريد أن أسألكِ سؤالًا صغيرًا</h2>
+        <p class="soft-copy">لكن يبدو أن أحد الزرين لديه رأي آخر</p>
+        <div id="runawayArea" class="runaway-area">
+          <button id="yesAskButton" class="primary-button" type="button">نعم، اسألني</button>
+          <button id="noAskButton" class="ghost-button" type="button">لا تسأل 🌝</button>
+        </div>
+        <p id="runawayMessage" class="feedback persistent" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section id="firstQuestion" class="screen" aria-labelledby="firstQuestionTitle">
+      <div class="warm-note question-card">
+        <div class="note-pin" aria-hidden="true">♡</div>
+        <p class="eyebrow">وقعتِ في الفخ ههههه 🌝</p>
+        <h2 id="firstQuestionTitle">ما الشيء الذي أفعله ويجعلكِ تشعرين بأنني أحبكِ فعلًا</h2>
+        <div class="answer-wrap">
+          <textarea id="loveAnswer" rows="6" maxlength="700" placeholder="اكتبي أول شيء خطر في بالكِ" aria-label="جواب السؤال الأول"></textarea>
+          <span class="answer-glow" aria-hidden="true"></span>
+        </div>
+        <button id="saveLoveAnswer" class="primary-button" type="button">هذا هو جوابي 🤍</button>
+        <p id="loveAnswerFeedback" class="feedback persistent" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section id="heartbeatGame" class="screen heartbeat-screen" aria-labelledby="heartbeatTitle">
+      <div class="heartbeat-stage centered">
+        <p class="eyebrow">تجربة صغيرة غير علمية إطلاقًا</p>
+        <h2 id="heartbeatTitle">لنرَ إن كانت نبضتان تعرفان طريقهما إلى بعضهما</h2>
+        <p class="soft-copy">اضغطي مطولًا على القلب ولا ترفعي إصبعكِ</p>
+        <button id="heartHold" class="heart-hold" type="button" aria-label="اضغطي مطولًا على القلب">
+          <span class="heart-core">♥</span>
+          <span class="pulse-ring ring-one"></span>
+          <span class="pulse-ring ring-two"></span>
+          <span class="pulse-ring ring-three"></span>
+        </button>
+        <div class="sync-meter" aria-hidden="true"><span id="syncMeterFill"></span></div>
+        <p id="heartbeatFeedback" class="feedback persistent">بانتظار نبضة أمولتي</p>
+        <button id="continueToStars" class="primary-button hidden" type="button">إلى النجوم ✦</button>
+      </div>
+    </section>
+
+    <section id="starsGame" class="screen stars-screen" aria-labelledby="starsTitle">
+      <div class="centered stars-copy">
+        <p class="eyebrow">خمس نجوم انفلتت من رسالتي</p>
+        <h2 id="starsTitle">المسي كل نجمة لتعرفي شيئًا أحبه فيكِ</h2>
+        <p id="starsCounter" class="soft-copy">0 من 5</p>
+      </div>
+      <div id="starsField" class="stars-field" aria-label="لعبة جمع النجوم">
+        <button class="collect-star star-a" data-label="عيناكِ" aria-label="نجمة عيناك">✦</button>
+        <button class="collect-star star-b" data-label="ضحكتكِ" aria-label="نجمة ضحكتك">✦</button>
+        <button class="collect-star star-c" data-label="صوتكِ" aria-label="نجمة صوتك">✦</button>
+        <button class="collect-star star-d" data-label="اجتهادكِ" aria-label="نجمة اجتهادك">✦</button>
+        <button class="collect-star star-e" data-label="كل جزء فيكِ" aria-label="نجمة كل جزء فيك">✦</button>
+        <div class="star-orbit orbit-a" aria-hidden="true"></div>
+        <div class="star-orbit orbit-b" aria-hidden="true"></div>
+      </div>
+      <div id="collectedLabels" class="collected-labels" aria-live="polite"></div>
+      <button id="enterLetter" class="primary-button hidden" type="button">افتحي الرسالة بهدوء</button>
+    </section>
+
+    <section id="letter" class="letter-screen" aria-labelledby="letterHeading">
+      <div class="letter-progress" aria-hidden="true"><span id="letterProgressBar"></span></div>
+      <div class="floating-words" aria-hidden="true"><span>أمولتي</span><span>30 07</span><span>♡</span></div>
+      <article class="living-letter">
+        <p class="eyebrow centered">رسالة واحدة، من أولها إلى آخرها</p>
+        <h2 id="letterHeading" class="letter-heading">إلى أمولتي، في يومها الجميل</h2>
+
+        <p class="letter-paragraph reveal-on-scroll">يا أمولتي، لم أرد أن يكون عيد ميلادكِ مجرد كلمات تصل عند منتصف الليل ثم تختفي بين بقية الرسائل، أردت أن أصنع لكِ مكانًا صغيرًا لا يدخله سواكِ، وأن أضع فيه ما لا أستطيع قوله كاملًا في محادثة عادية، لأنكِ بالنسبة إليّ لستِ شخصًا عابرًا، ولا تفصيلًا مرّ في أيامي ثم مضى</p>
+
+        <p class="letter-paragraph reveal-on-scroll">لا أعرف متى بدأ كل هذا بالضبط، لم أجلس يومًا وأقرر أن أحبكِ، بل وجدت قلبي قد اختاركِ بهدوء، ثم اكتشفت أن حضوركِ أصبح يسكن أشياء كثيرة حولي، صارت النجوم تذكرني بعينيكِ، وصار الليل أقرب إليّ لأنني أعرف أن حديثًا معكِ قد يمر فيه، وصارت تفاصيل صغيرة جدًا تحمل اسمكِ دون أن تكتبيه عليها</p>
+
+        <p class="letter-paragraph reveal-on-scroll">أحب عينيكِ، وأحب ضحكتكِ التي تأخذ مساحة صغيرة من وجهكِ ثم تأخذ معها مساحة كبيرة من قلبي، أحب صوتكِ، ذلك الصوت الذي يستطيع أن يغيّر مزاج يوم كامل، وأحب اجتهادكِ، أحب أنكِ تحاولين، وأنكِ تمنحين ما تريدينه وقتكِ وتعبكِ وقلبكِ، وأنا فخور بكِ، ليس فقط عندما تصلين، بل في كل خطوة صادقة تمشينها نحو ما تريدين</p>
+
+        <p class="letter-paragraph reveal-on-scroll">وأحب كل جزء فيكِ، حتى تلك التفاصيل التي قد ترينها عادية ولا تنتبهين إليها، لو استطعت أن أهديكِ شيئًا لا يُشترى، لأهديتكِ القدرة على أن تري نفسكِ للحظة واحدة بعينيّ، عندها فقط ستعرفين لماذا أراكِ مختلفة، ولماذا لا يشبه حضوركِ حضور أي أحد آخر</p>
+
+        <div id="mirrorGame" class="mirror-game reveal-on-scroll">
+          <div class="mirror-frame">
+            <div class="mirror-message">
+              <span>هذه أنتِ بعيني</span>
+              <strong>أجمل مما تظنين، وأقوى مما تشعرين، وأقرب إلى القلب مما يمكن للكلام أن يشرح</strong>
+            </div>
+            <canvas id="mirrorCanvas" aria-label="امسحي الضباب لتظهري الرسالة"></canvas>
+          </div>
+          <p id="mirrorHint">مرّري إصبعكِ على الضباب ببطء</p>
+        </div>
+
+        <p class="letter-paragraph reveal-on-scroll">كنت بعيدًا عن الشعر، ثم جئتِ أنتِ، فبدأت أفهم لماذا يحتاج الإنسان إلى كلمات أكثر عندما يحب، أصبحت أبحث في الجمل عن شيء يشبهكِ، ثم أكتشف أن أجمل الكلام يظل أقل من أن يصفكِ كما أراكِ، أنتِ الدهشة التي لا تعتادها الروح، والتفصيل النادر الذي لا يتكرر، والضوء الذي يجعل الأشياء العادية تبدو أجمل</p>
+
+        <div class="poetry-moment reveal-on-scroll" aria-hidden="true">
+          <span>عيناكِ</span><span>ضحكتكِ</span><span>صوتكِ</span><span>أمولتي</span><i></i>
+        </div>
+
+        <p class="letter-paragraph reveal-on-scroll">وحتى منطقة ولاد العربي، لم أكن أعرف لماذا يمكن لمكان كامل أن يصبح قريبًا من القلب، حتى ارتبط اسمكِ به، لا أدري لماذا اختاروا لها هذا الاسم، لكنني متأكد أنها تستحق اسمًا أجمل، لأن المكان الذي تعيش فيه أمولتي لم يعد عندي مجرد نقطة على الخريطة، بل صار مكانًا أحبه فقط لأنكِ هناك</p>
+
+        <div class="rename-card reveal-on-scroll">
+          <p>الاسم الذي يقترحه كريم من هذه اللحظة</p>
+          <button id="renamePlaceButton" class="stamp-button" type="button">تايلاند</button>
+          <div class="map-line" aria-hidden="true"><span></span><i>✦</i></div>
+          <p id="renameFeedback" class="feedback persistent"></p>
+        </div>
+
+        <p class="letter-paragraph reveal-on-scroll">نعرف نحن الاثنان أننا نختلف أحيانًا، وأن الغضب قد يجعل الكلمات لا تشبه ما في القلب، لا أحب شجاراتنا، ولا أريد أن يصبح الأذى عادة بيننا، لكنني أحب أننا نعود ونحاول من جديد، أتمنى أن نتعلم دائمًا كيف نختلف باحترام، وكيف نعتذر بصدق، وكيف نصلح ما حدث بدل أن نحاول الانتصار على بعضنا، فما بيننا عندي أجمل من أن نخسره بسبب لحظة غضب</p>
+
+        <div id="relationshipOrbit" class="relationship-orbit reveal-on-scroll" aria-label="دائرة نحب نختلف نفهم نصلح نبقى">
+          <div class="orbit-ring"></div>
+          <div class="orbit-tracer">♡</div>
+          <button class="orbit-node node-love active" data-step="نحب" type="button">نحب</button>
+          <button class="orbit-node node-differ" data-step="نختلف" type="button">نختلف</button>
+          <button class="orbit-node node-understand" data-step="نفهم" type="button">نفهم</button>
+          <button class="orbit-node node-fix" data-step="نصلح" type="button">نصلح</button>
+          <button class="orbit-node node-stay" data-step="نبقى" type="button">نبقى</button>
+          <div class="orbit-center"><small>نعود دائمًا إلى</small><strong id="orbitCenterText">نحب</strong></div>
+        </div>
+
+        <p class="letter-paragraph reveal-on-scroll">وربما أطيل حديثنا، وربما أبحث عن موضوع جديد بعد أن ينتهي السابق، ليس لأن لدي دائمًا شيئًا مهمًا، بل لأنني لا أحب أن ينتهي الوقت الذي يجمعني بكِ بسرعة، وحتى عندما لا أسهر معكِ، قد أسهر أفكر فيكِ، في كلامكِ، وفي ضحكتكِ، وفي أشياء كان يمكن أن أقولها لكِ ولم أعرف كيف أصوغها</p>
+
+        <div id="namePuzzle" class="puzzle-card reveal-on-scroll">
+          <p>توجد كلمة لا يمكن أن تضيع مني حقًا، اجمعي حروفها قبل أن تهرب 🌝</p>
+          <div class="answer-slots" aria-label="خانات اسم أمال"><span></span><span></span><span></span><span></span></div>
+          <div id="floatingLetters" class="floating-letters" aria-label="حروف اسم أمال المبعثرة">
+            <button class="letter-tile tile-l" data-letter="ل" type="button">ل</button>
+            <button class="letter-tile tile-a" data-letter="ا" type="button">ا</button>
+            <button class="letter-tile tile-m" data-letter="م" type="button">م</button>
+            <button class="letter-tile tile-hamza" data-letter="أ" type="button">أ</button>
+          </div>
+          <p id="puzzleFeedback" class="feedback persistent">اضغطي الحروف بالترتيب الصحيح</p>
+        </div>
+
+        <p class="letter-paragraph reveal-on-scroll">أضع اسمكِ في دعائي لأنني أحب أن يحفظكِ الله في الأماكن التي لا أستطيع الوصول إليها، وأن يطمئن قلبكِ في اللحظات التي لا أعرف عنها شيئًا، أدعو لكِ كما أدعو لنفسي، وأنتظر نجاحكِ بفرحة تشبه فرحتي بنجاحي، لأنني أؤمن بكِ حتى في الأوقات التي قد تتعبين فيها أو تشكّين في نفسكِ</p>
+
+        <p class="letter-paragraph reveal-on-scroll">اللهم إني أستودعك أمال، فاحفظها من كل أذى، وأبعد عن قلبها ما يثقله، واشرح صدرها، واملأ أيامها طمأنينة وخيرًا، يا رب إن ضاقت بها لحظة فقرّب إليها الراحة، وإن تعبت فقوّها، وإن تمنت خيرًا فاكتب لها أجمل مما تتمنى، وبارك لها في عمرها ومستقبلها وكل خطوة قادمة</p>
+
+        <div class="wish-lantern reveal-on-scroll" aria-hidden="true"><span>دعوة لكِ لا تنطفئ</span><i></i></div>
+
+        <p class="letter-paragraph reveal-on-scroll">وفي عامكِ الثامن عشر أتمنى ألا تنتظري الوصول كي تسمحي لنفسكِ بالسعادة، أتمنى أن تفرحي بالطريق، وأن تكوني أحن على نفسكِ، وأن تعرفي كم أنتِ إنسانة استثنائية، أتمنى أن تبقى عيناكِ ممتلئتين بالنور، وضحكتكِ قريبة، وصوتكِ سعيدًا، وقلبكِ مطمئنًا</p>
+
+        <p class="letter-paragraph reveal-on-scroll">شكرًا لأنكِ جعلتِني أحب الشعر، وأحب مكانًا لأنكِ تسكنينه، وأحب أحاديث طويلة لم أكن أظن أنني سأتمسك بها، شكرًا لأنكِ دخلتِ حياتي فغيّرتِ معاني أشياء كثيرة دون أن تطلبي ذلك، قصتنا ليست كاملة ولا مثالية، لكنها صادقة، وأنا أتمنى أن نكتب ما بقي منها بقلوب أنضج، وثقة أكبر، واهتمام لا يضيع وقت الغضب</p>
+
+        <p class="letter-paragraph letter-closing reveal-on-scroll">ثمانية عشر عامًا من أمال، وعيد ميلاد سعيد يا أمولتي، أحبكِ، وأحب اجتهادكِ، وعينيكِ، وضحكتكِ، وصوتكِ، وكل تفصيل صغير فيكِ، وأسأل الله أن يجعل عامكِ الجديد أجمل من كل ما تتمنين</p>
+
+        <button id="continueToMemory" class="primary-button reveal-on-scroll" type="button">بقي سؤال واحد قبل النهاية</button>
+      </article>
+    </section>
+
+    <section id="memoryQuestion" class="screen" aria-labelledby="memoryTitle">
+      <div class="warm-note question-card memory-note">
+        <div class="note-pin" aria-hidden="true">✦</div>
+        <p class="eyebrow">شيء صغير منكِ سيبقى هنا</p>
+        <h2 id="memoryTitle">ما ذكرى صغيرة بيننا تحتفظين بها، حتى لو كنتِ تظنين أنني نسيتها</h2>
+        <div class="answer-wrap">
+          <textarea id="memoryAnswer" rows="6" maxlength="900" placeholder="اكتبي الذكرى كما تتذكرينها" aria-label="جواب سؤال الذكرى"></textarea>
+          <span class="answer-glow" aria-hidden="true"></span>
+        </div>
+        <button id="saveMemoryAnswer" class="primary-button" type="button">احفظي هذه الذكرى</button>
+        <p id="memoryFeedback" class="feedback persistent" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section id="candleSection" class="screen candle-screen" aria-labelledby="candleTitle">
+      <div class="centered candle-wrap">
+        <p class="eyebrow">وصلنا إلى اللحظة التي لا تتكرر</p>
+        <h2 id="candleTitle">أغمضي عينيكِ، خذي وقتكِ، تمنّي أمنية، ثم اضغطي مطولًا على الشعلة</h2>
+        <p class="soft-copy">لن تنطفئ بسرعة هذه المرة</p>
+        <button id="flameButton" class="flame-button" type="button" aria-label="اضغطي مطولًا لإطفاء الشمعة">
+          <span class="flame-aura"></span><span class="flame"></span><span class="wick"></span><span class="candle"></span><span class="wax-drop"></span>
+        </button>
+        <div class="hold-meter" aria-hidden="true"><span id="holdMeterFill"></span></div>
+        <p id="candleFeedback" class="feedback persistent">حين تكونين جاهزة، ابدئي الضغط</p>
+      </div>
+    </section>
+
+    <section id="finalQuestion" class="screen" aria-labelledby="finalQuestionTitle">
+      <div class="warm-note question-card final-note">
+        <div class="note-pin" aria-hidden="true">♡</div>
+        <p class="eyebrow">قبل أن تغادري هذه الليلة</p>
+        <h2 id="finalQuestionTitle">بعد كل ما رأيتِه، ما أول شيء تريدين قوله لكريم</h2>
+        <div class="answer-wrap">
+          <textarea id="finalAnswer" rows="6" maxlength="900" placeholder="اكتبي ما في قلبكِ" aria-label="جواب السؤال الأخير"></textarea>
+          <span class="answer-glow" aria-hidden="true"></span>
+        </div>
+        <button id="saveFinalAnswer" class="primary-button" type="button">هذا كل ما أريد قوله 🤍</button>
+        <p id="finalAnswerFeedback" class="feedback persistent" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section id="finale" class="screen finale-screen" aria-labelledby="finaleTitle">
+      <canvas id="confettiCanvas" aria-hidden="true"></canvas>
+      <div class="finale-orbits" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="finale-content centered">
+        <p class="date-mark">30 • 07 • 18</p>
+        <p class="eighteen-final-mark">ثمانية عشر عامًا من أمال</p>
+        <h2 id="finaleTitle">HAPPY BIRTHDAY<br>AMOLATY</h2>
+        <p>أتمنى أن تبقى هذه الليلة ذكرى دافئة في قلبكِ، وأن يكون القادم أجمل مما حلمتِ</p>
+        <button id="sendWhatsApp" class="whatsapp-button" type="button">أرسلي إجاباتكِ إلى كريم 🤍</button>
+        <button id="waitButton" class="ghost-button small-runaway" type="button">لا، سأترك كريم ينتظر قليلًا 🌝</button>
+        <p id="whatsappFeedback" class="feedback persistent"></p>
+        <p class="signature">صُنِع بكل صدق، كريم</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
